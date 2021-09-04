@@ -1,10 +1,12 @@
-FROM openjdk:8
+FROM maven:3.5.3-jdk-8-alpine
 
-RUN apt-get update && apt-get install -y maven
-COPY . /project
-RUN  cd /project && mvn package
+WORKDIR /project
+COPY pom.xml .
 
-#run the spring boot application
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom", "-Dblabla", "-jar","/project/target/demo-0.0.1-SNAPSHOT.jar"]
+# Download all dependencies to create a cached layer
+RUN mvn de.qaware.maven:go-offline-maven-plugin:resolve-dependencies
+COPY . .
+RUN mvn package
 
 
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/project/target/demo-0.0.1-SNAPSHOT.jar"]

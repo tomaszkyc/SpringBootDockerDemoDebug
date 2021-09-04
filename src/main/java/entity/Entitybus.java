@@ -55,4 +55,12 @@ public class Entitybus {
         result = 31 * result + (enumber != null ? enumber.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Entitybus{" +
+                "eid=" + eid +
+                ", enumber='" + enumber + '\'' +
+                '}';
+    }
 }
